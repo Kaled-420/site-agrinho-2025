@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conexão Campo-Cidade | Integração Sustentável</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset e Variáveis Globais */
+        :root {
+            --azul-primario: #7986cb;
+            --azul-secundario: #9fa8da;
+            --roxo-primario: #ba68c8;
+            --roxo-secundario: #ce93d8;
+            --roxo-claro: #e1bee7;
+            --branco: #f5f5f5;
+            --preto: #121212;
+            --cinza-escuro: #1e1e1e;
+            --cinza-medio: #2d2d2d;
+            --sombra: 0 4px 8px rgba(0,0,0,0.3);
+            --transicao: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--branco);
+            background-color: var(--preto);
+            overflow-x: hidden;
+        }
+
+        /* Tipografia */
+        h1, h2, h3, h4 {
+            font-family: 'Georgia', serif;
+            font-weight: 700;
+            color: var(--azul-primario);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin: 2rem 0 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: var(--roxo-primario);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Layout Principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(135deg, var(--cinza-escuro), var(--cinza-medio));
+            color: var(--branco);
+            padding: 1rem 0;
+            box-shadow: var(--sombra);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transicao);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Navegação */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--branco);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transicao);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--branco);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ce') center/cover no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--branco);
+            margin-top: 72px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--branco);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--roxo-secundario);
+            color: var(--preto);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transicao);
+            border: 2px solid var(--roxo-secundario);
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--branco);
+            transform: translateY(-3px);
+        }
+
+        /* Seções Principais */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+        }
+
+        /* Sobre */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transicao);
+        }
+
+        .about-img img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Trocas Culturais */
+        .cultural-exchange {
+            background-color: var(--cinza-escuro);
+        }
+
+        .exchange-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .exchange-card {
+            background-color: var(--cinza-medio);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+            transition: var(--transicao);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .exchange-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .exchange-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        .exchange-card-content {
+            padding: 1.5rem;
+        }
+
+        .exchange-card h3 {
+            color: var(--azul-primario);
+            margin-bottom: 0.8rem;
+        }
+
+        .exchange-direction {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: var(--roxo-claro);
+            color: var(--preto);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Alimentação */
+        .food-section {
+            background: linear-gradient(to bottom, var(--preto), var(--cinza-escuro));
+        }
+
+        .food-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--roxo-primario);
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-item:nth-child(odd) {
+            justify-content: flex-start;
+            text-align: right;
+            padding-right: 50%;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-end;
+            text-align: left;
+            padding-left: 50%;
+        }
+
+        .timeline-content {
+            background-color: var(--cinza-medio);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--sombra);
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--azul-secundario);
+            border: 4px solid var(--cinza-medio);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -8px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -8px;
+        }
+
+        /* Tecnologia */
+        .tech-section {
+            background-color: var(--cinza-escuro);
+        }
+
+        .tech-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background-color: var(--cinza-medio);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transicao);
+            box-shadow: var(--sombra);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            background-color: var(--cinza-escuro);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            color: var(--roxo-primario);
+            margin-bottom: 1rem;
+        }
+
+        /* Depoimentos */
+        .testimonials {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1498837167922-ddd27525d352') center/cover fixed;
+            color: var(--branco);
+            text-align: center;
+            padding: 5rem 0;
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial {
+            padding: 2rem;
+            display: none;
+        }
+
+        .testimonial.active {
+            display: block;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .slider-controls {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .slider-dot.active {
+            background-color: var(--branco);
+        }
+
+        /* Rodapé */
+        footer {
+            background: linear-gradient(135deg, var(--cinza-escuro), var(--cinza-medio));
+            color: var(--branco);
+            padding: 3rem 0 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-about p {
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: var(--branco);
+            transition: var(--transicao);
+        }
+
+        .social-link:hover {
+            background-color: var(--roxo-secundario);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--branco);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transicao);
+        }
+
+        .footer-links a:hover {
+            color: var(--branco);
+            padding-left: 5px;
+        }
+
+        /* Painel Deslizante - NOVO */
+        .slide-panel-section {
+            background: linear-gradient(135deg, var(--roxo-primario), var(--azul-primario));
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-panel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .slide-panel {
+            background-color: var(--cinza-medio);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            height: 500px;
+            position: relative;
+        }
+
+        .slide-panel-header {
+            background-color: var(--cinza-escuro);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-panel-header h3 {
+            color: var(--branco);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .slide-panel-handle {
+            width: 60px;
+            height: 6px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin: 10px auto;
+            cursor: ns-resize;
+            transition: var(--transicao);
+        }
+
+        .slide-panel-handle:hover {
+            background-color: var(--roxo-secundario);
+        }
+
+        .slide-panel-content {
+            padding: 2rem;
+            height: calc(100% - 70px);
+            overflow-y: auto;
+            transition: height 0.3s ease;
+        }
+
+        .slide-panel-content.collapsed {
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .panel-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transicao);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255,255,255,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--branco);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--roxo-claro);
+        }
+
+        .panel-facts {
+            margin-top: 2rem;
+        }
+
+        .fact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .fact-icon {
+            font-size: 1.5rem;
+            color: var(--roxo-secundario);
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .fact-text {
+            flex: 1;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding: 0;
+                text-align: left;
+                justify-content: flex-start;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: -8px;
+                right: auto;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .panel-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .slide-panel {
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 72px;
+                left: 0;
+                width: 100%;
+                background-color: var(--cinza-escuro);
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav.active {
+                transform: translateY(0);
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .panel-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-panel {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-tractor" style="font-size: 2rem;"></i>
+                <span class="logo-text">Conexão Campo-Cidade</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#exchange">Trocas</a></li>
+                    <li><a href="#food">Alimentação</a></li>
+                    <li><a href="#tech">Tecnologia</a></li>
+                    <li><a href="#stats">Estatísticas</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Conecta Campo e Cidade: A Relação entre a Produção e o Consumo</h1>
+            <p>Descubra como essas duas realidades se complementam e fortalecem nossa sociedade</p>
+            <a href="#about" class="btn">Explore Mais</a>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre a Conexão</h2>
+                <p>Entenda a importância dessa relação fundamental para nosso desenvolvimento</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Uma Relação Essencial</h3>
+                    <p>Não importa se é o cheiro de terra molhada depois da chuva ou o asfalto quente sob o sol do meio-dia: o campo e a cidade estão mais ligados do que parecem. Enquanto um dorme ao som dos grilos, o outro nunca para, iluminado por luzes artificiais. Mas é no mercado, na feira, no caminhão que leva verduras frescas antes do amanhecer, que essa conexão se revela.</p>
+                    <p>O homem do campo sabe que seu trabalho alimenta multidões distantes. O urbano, muitas vezes, nem imagina as mãos calejadas por trás do pão que compra na padaria. A cidade consome; o campo sustenta. E, no meio disso, há histórias, saudades e um vai e vem constante de gente, de sonhos, de vida.</p>
+                    <p>No fim, somos todos parte da mesma corrente — só que alguns carregam o cheiro do mato, e outros, a pressa do concreto.</p>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef" alt="Campo e cidade">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trocas Culturais -->
+    <section class="cultural-exchange" id="exchange">
+        <div class="container">
+            <div class="section-title">
+                <h2>Trocas Culturais</h2>
+                <p>Descubra o fluxo constante de influências entre esses dois mundos</p>
+            </div>
+            <div class="exchange-grid">
+                <!-- Card 1 -->
+                <div class="exchange-card">
+                    <img src="https://picsum.photos/id/30/600/400">
+                    <div class="exchange-card-content">
+                        <span class="exchange-direction">Campo → Cidade</span>
+                        <h3>Culinária Tradicional</h3>
+                        <p>Tem coisa mais gostosa que aquele cheiro de comida caseira? O feijão tropeiro, a pamonha quentinha, o queijo minas fresquinho - esses sabores do interior conquistaram de vez o paladar da cidade. Hoje em dia, até restaurante chique coloca no cardápio pratos que nasceram nas cozinhas das fazendas, provando que boa comida não tem endereço certo.</p>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="exchange-card">
+                    <img src="https://images.pexels.com/photos/164835/pexels-photo-164835.jpeg" alt="Música sertaneja">
+                    <div class="exchange-card-content">
+                        <span class="exchange-direction">Campo → Cidade</span>
+                        <h3>Música e Dança</h3>
+                        <p>O som da viola não fica preso no sertão. A música caipira, que antes ecoava só pelos campos, hoje lota estádios nas grandes cidades. É o ritmo da roça invadindo o asfalto, contando histórias de amor e saudade que todo mundo entende, seja no interior ou na capital. Quem nunca cantou junto com uma música sertaneja no trânsito?.
+                        .</p>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="exchange-card">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c">
+                    <div class="exchange-card-content">
+                        <span class="exchange-direction">Cidade → Campo</span>
+                        <h3>Tecnologia Agrícola</h3>
+                        <p>Hoje, o campo está mais high-tech do que muitos imaginam! Drones sobrevoam plantações para identificar pragas, sensores medem a umidade do solo em tempo real e tratores autônomos já são realidade em grandes fazendas. Até aplicativos ajudam o pequeno produtor a calcular o melhor dia para plantar ou vender sua colheita. O melhor? Tudo isso significa mais comida na nossa mesa com menos desperdício.</p>
+                    </div>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="exchange-card">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Arquitetura urbana">
+                    <div class="exchange-card-content">
+                        <span class="exchange-direction">Cidade → Campo</span>
+                        <h3>Arquitetura e Construção</h3>
+                        <p>Quem pensa que criar peixe é só jogar ração na água está atrasado! Tanques inteligentes agora controlam automaticamente oxigênio, temperatura e pH da água. Sistemas de recirculação filtram e reaproveitam 90% da água, enquanto câmeras subaquáticas monitoram o crescimento dos peixes. E tem mais: rações especiais feitas com insetos estão revolucionando a nutrição animal.
+
+</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alimentação -->
+    <section class="food-section" id="food">
+        <div class="container">
+            <div class="section-title">
+                <h2>Alimentação Sustentável</h2>
+                <p>Do campo para a mesa: a jornada dos alimentos</p>
+            </div>
+            <div class="food-timeline">
+                <div class="timeline-line"></div>
+                
+                <!-- Item 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Produção Rural</h3>
+                        <p>Agricultores familiares e grandes produtores cultivam alimentos usando técnicas tradicionais e modernas, com atenção crescente à sustentabilidade.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Transporte e Logística</h3>
+                        <p>Os alimentos percorrem grandes distâncias até os centros urbanos, com desafios de conservação e redução de desperdício.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Distribuição</h3>
+                        <p>Ceas, mercados atacadistas e varejistas recebem os produtos, que seguem para supermercados, feiras e restaurantes.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Consumo Urbano</h3>
+                        <p>Os consumidores têm acesso a alimentos frescos, com crescente demanda por produtos orgânicos e rastreáveis.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tecnologia -->
+    <section class="tech-section" id="tech">
+        <div class="container">
+            <div class="section-title">
+                <h2>Tecnologia que Conecta</h2>
+                <p>Inovações que aproximam o campo e a cidade</p>
+            </div>
+            <div class="tech-cards">
+                <!-- Card 1 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Aplicativos Rurais</h3>
+                    <p>Plataformas conectam produtores diretamente aos consumidores, eliminando intermediários.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Agricultura de Precisão</h3>
+                    <p>Drones e sensores monitoram plantações, otimizando recursos e aumentando produtividade.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Logística Inteligente</h3>
+                    <p>Sistemas de roteamento e monitoramento reduzem perdas no transporte de alimentos.</p>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Hortas Urbanas</h3>
+                    <p>Tecnologias permitem cultivo em pequenos espaços urbanos, aproximando produção e consumo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Painel Deslizante - NOVA SEÇÃO -->
+    <section class="slide-panel-section" id="stats">
+        <div class="slide-panel-container">
+            <div class="section-title">
+                <h2>Números da Conexão</h2>
+                <p>Dados que mostram a importância dessa relação</p>
+            </div>
+            <div class="slide-panel" id="slidePanel">
+                <div class="slide-panel-header">
+                    <h3>Estatísticas e Curiosidades</h3>
+                    <div class="slide-panel-handle" id="panelHandle"></div>
+                </div>
+                <div class="slide-panel-content" id="panelContent">
+                    <div class="panel-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">70%</div>
+                            <div class="stat-label">dos alimentos consumidos nas cidades vêm do campo</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">5,3 mi</div>
+                            <div class="stat-label">pessoas migram anualmente do campo para a cidade</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">R$ 1,2 tri</div>
+                            <div class="stat-label">é o valor movimentado pela agricultura no Brasil</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">35%</div>
+                            <div class="stat-label">dos jovens urbanos nunca visitaram uma fazenda</div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-facts">
+                        <h3>Você Sabia?</h3>
+                        <div class="fact-item">
+                            <div class="fact-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="fact-text">
+                                <p>Um agricultor brasileiro alimenta em média 800 pessoas por ano, número que era de apenas 150 pessoas na década de 1970.</p>
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <div class="fact-icon">
+                                <i class="fas fa-truck-moving"></i>
+                            </div>
+                            <div class="fact-text">
+                                <p>Os alimentos percorrem em média 1.500 km do campo até chegar às grandes cidades, gerando desafios logísticos e ambientais.</p>
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <div class="fact-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="fact-text">
+                                <p>75% dos agricultores familiares já utilizam smartphones para acessar informações sobre preços, clima e técnicas de cultivo.</p>
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <div class="fact-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="fact-text">
+                                <p>Produtos orgânicos e de origem conhecida são 80% mais valorizados pelos consumidores urbanos do que há 10 anos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Quem Vive Essa Conexão</h2>
+                <p>Histórias reais de pessoas que fazem a ponte entre campo e cidade</p>
+            </div>
+            <div class="testimonial-slider">
+                <!-- Depoimento 1 -->
+                <div class="testimonial active">
+                    <p class="testimonial-text">"Como agricultor familiar, os aplicativos de venda direta mudaram minha vida. Agora vendo 70% da minha produção diretamente para consumidores na cidade, com melhor preço e menos desperdício."</p>
+                    <p class="testim
